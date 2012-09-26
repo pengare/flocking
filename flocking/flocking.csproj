@@ -19,7 +19,7 @@
     <XnaUpgrade>
     </XnaUpgrade>
     <XnaOutputType>Game</XnaOutputType>
-    <XnaProfile>Reach</XnaProfile>
+    <XnaProfile>HiDef</XnaProfile>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
@@ -116,8 +116,11 @@
     <Compile Include="behavior\RepulsionBehavior.cs" />
     <Compile Include="behavior\SeparationBehavior.cs" />
     <Compile Include="behavior\HuntingBehavior.cs" />
+    <Compile Include="Camera.cs" />
     <Compile Include="Formation.cs" />
+    <Compile Include="FPS.cs" />
     <Compile Include="Grid.cs" />
+    <Compile Include="ICameraService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Game1.cs" />
