@@ -38,6 +38,9 @@ namespace flocking
         private static float farPlane = 10000.0f;
         public static float cameraSpeed = 0.05f;
 
+
+        public static Boolean bAttack = false;
+
         public Camera(Game game, Vector3 cameraPosition, Vector3 cameraRight, Vector3 cameraUp, Vector3 cameraLook)
             : base(game)
         {
@@ -109,6 +112,15 @@ namespace flocking
             {
                 Position.Z += 50;
             }
+            if (currentState.IsKeyDown(Keys.J))
+            {
+                bAttack = true;
+            }
+            if (currentState.IsKeyDown(Keys.K))
+            {
+                bAttack = false;
+            }
+            
 
 
             this.previousState = currentState;

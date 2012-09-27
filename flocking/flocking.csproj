@@ -112,6 +112,7 @@
     <Compile Include="behavior\AlignmentBehavior.cs" />
     <Compile Include="behavior\Behavior.cs" />
     <Compile Include="behavior\CohesionBehavior.cs" />
+    <Compile Include="behavior\DraftBehavior.cs" />
     <Compile Include="behavior\InertiaBehavior.cs" />
     <Compile Include="behavior\RandomBehavior.cs" />
     <Compile Include="behavior\RepulsionBehavior.cs" />

@@ -30,12 +30,14 @@ namespace flocking {
         public void reset() {
             this.formation = new Formation(screen, slits);
             List<Behavior> fishbhs = new List<Behavior>();
+            fishbhs.Add(new DraftBehavior());
             fishbhs.Add(new InertiaBehavior());
             fishbhs.Add(new RandomBehavior());
             fishbhs.Add(new AlignmentBehavior());
             fishbhs.Add(new SeparationBehavior());
             fishbhs.Add(new CohesionBehavior());
             fishbhs.Add(new RepulsionBehavior());
+            
             List<Behavior> whalebhs = new List<Behavior>();
             whalebhs.Add(new InertiaBehavior());
             whalebhs.Add(new RandomBehavior());
