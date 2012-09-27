@@ -15,6 +15,7 @@ namespace flocking.spec {
         public float RandomDirectionSensitivity { get; private set; }
         public float MemberSensitivity { get; private set; }
         public float AlienSensitivity { get; private set; }
+        public float AlienSeparationDistance{get; private set;}
 
         public float RotationLimitation { get; private set; }
 
@@ -25,7 +26,9 @@ namespace flocking.spec {
             SeparationDistance = 60f;
             InertiaDirectionSensitivity = 1.0f;
             MemberSensitivity = 1.0f;
-            AlienSensitivity = 50f;
+            AlienSensitivity = 10000f;//5000f;// 50f;
+            AlienSeparationDistance = 50000f;//600f;
+
             RandomDirectionSensitivity = 0.05f;
 
             RotationLimitation = 5.0f;

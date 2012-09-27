@@ -21,6 +21,7 @@ namespace flocking {
         #region members
         public Camera camera;
         private FPS fps;
+        public Kinect kinect;
         #endregion members
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
@@ -30,7 +31,9 @@ namespace flocking {
 
         Model monster = null;
 
-        public static int thickness = 200;
+        public static int thickness = 256;
+        public static int width = 0;
+        public static int height = 0;
 
         //vertical placement of view on cylinder
         private float distortionShift = 0.0260000024f;
@@ -47,7 +50,7 @@ namespace flocking {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
 
-            //graphics.IsFullScreen = true;
+            graphics.IsFullScreen = true;
             graphics.PreferredBackBufferWidth = 1280;
             graphics.PreferredBackBufferHeight = 720;
             IsFixedTimeStep = false;
@@ -72,6 +75,10 @@ namespace flocking {
             this.fps = new FPS(this);
             this.Components.Add(this.fps);
 
+            this.kinect = new Kinect(this);
+            this.Components.Add(this.kinect);
+            //this.Services.AddService(typeof(Kinect), this.kinect);
+
             effect = new BasicEffect(GraphicsDevice);
 
 
@@ -95,13 +102,13 @@ namespace flocking {
 
             // TODO: use this.Content to load your game content here
 
-            int width = graphics.PreferredBackBufferWidth;
-            int height = graphics.PreferredBackBufferHeight;
+            width = graphics.PreferredBackBufferWidth;
+            height = graphics.PreferredBackBufferHeight;
             int heads = 200;
-            int slits = 32;
+            int slits = 16;
             scene = new Scene(this, width, height, heads, slits);
             scene.Renderer.addAnimalTexture(animal.AnimalType.Fish, Content.Load<Model>("venus"));
-            scene.Renderer.addAnimalTexture(animal.AnimalType.Whale, Content.Load<Model>("venus"));
+            scene.Renderer.addAnimalTexture(animal.AnimalType.Whale, Content.Load<Model>("whale"));
             
             monster = Content.Load<Model>("venus");
 
@@ -213,7 +220,7 @@ namespace flocking {
             //spriteBatch.End();
 
 
-           // DrawForCylinder();
+            //DrawForCylinder();
 
             //DrawCalibrationPattern();
 

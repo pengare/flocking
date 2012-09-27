@@ -16,6 +16,8 @@ namespace flocking.animal {
         public float ZPosition = 101;
         public int ZDirection = 1;
         public Random randZ = new Random();
+        public Boolean bActive = true;
+        public int iLeftRightHand = 0;  //left whale -1, right hand whale 1, fish 0
         public Color Color { get; set; }
         public AnimalType AnimalType { get; set; }
         public Spec AnimalSpec { get; set; }
@@ -47,10 +49,9 @@ namespace flocking.animal {
             Direction = restrictRotationSpeed(Direction, newDir, rotLimit);
 
             //update Z position
-            ZPosition += ZDirection * 0.2f;
-            if (ZPosition >= Game1.thickness || ZPosition <= 100.0f)
+            ZPosition += ZDirection;//*0.2f;
+            if (ZPosition >= Game1.thickness || ZPosition <= 0.0f)
                 ZDirection = -ZDirection;
-
         }
 
         public virtual void reactTo(Animal you, ref Animal target, ref float tdist, ref Vector2 newDir) {
@@ -69,9 +70,70 @@ namespace flocking.animal {
         }
 
         public virtual void updatePosition(float dt, Formation frm) {
-            Vector2 newPos = Position + AnimalSpec.RadialVelocity * Direction * dt;
-            frm.normalize(ref newPos, out newPos);
-            frm.move(this, newPos);
+            if (this.AnimalType == AnimalType.Fish)
+            {
+                Vector2 newPos = Position + AnimalSpec.RadialVelocity * Direction * dt;
+                frm.normalize(ref newPos, out newPos);
+                frm.move(this, newPos);
+            }
+            else if (this.AnimalType == AnimalType.Whale && this.iLeftRightHand == -1)  //left hand
+            {
+                if (Kinect.bLeftDataValid)
+                {
+                    this.bActive = true;
+
+                    Vector2 leftHandPos = Kinect.leftHandWhale;
+                    leftHandPos.X += 70;
+                    leftHandPos.Y += 40;
+                    if (leftHandPos.X < 0)
+                        leftHandPos.X = 0;
+                    else if (leftHandPos.X > 100)
+                        leftHandPos.X = 100;
+
+                    if (leftHandPos.Y < 0)
+                        leftHandPos.Y = 0;
+                    else if (leftHandPos.Y > 100)
+                        leftHandPos.Y = 100;
+
+                    Vector2 newPos = new Vector2(leftHandPos.X / 100.0f * Game1.width, leftHandPos.Y / 100.0f * Game1.height);
+
+                    frm.normalize(ref newPos, out newPos);
+                    frm.move(this, newPos);
+                }
+                else
+                {
+                    this.bActive = false;
+                }
+            }
+            else if (this.AnimalType == AnimalType.Whale && this.iLeftRightHand == 1)  //right hand
+            {
+                if (Kinect.bRightDataValid)
+                {
+                    this.bActive = true;
+
+                    Vector2 rightHandPos = Kinect.rightHandWhale;
+                    rightHandPos.X += 30;
+                    rightHandPos.Y += 40;
+                    if (rightHandPos.X < 0)
+                        rightHandPos.X = 0;
+                    else if (rightHandPos.X > 100)
+                        rightHandPos.X = 100;
+
+                    if (rightHandPos.Y < 0)
+                        rightHandPos.Y = 0;
+                    else if (rightHandPos.Y > 100)
+                        rightHandPos.Y = 100;
+
+                    Vector2 newPos = new Vector2(rightHandPos.X / 100.0f * Game1.width, rightHandPos.Y / 100.0f * Game1.height);
+                    frm.normalize(ref newPos, out newPos);
+                    frm.move(this, newPos);
+                }
+                else
+                {
+                    this.bActive = false;
+                }
+
+            }
         }
 
         public Vector2 restrictRotationSpeed(Vector2 oldDir, Vector2 newDir, float limit) {

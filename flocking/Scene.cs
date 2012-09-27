@@ -30,7 +30,7 @@ namespace flocking {
         public void reset() {
             this.formation = new Formation(screen, slits);
             List<Behavior> fishbhs = new List<Behavior>();
-            fishbhs.Add(new DraftBehavior());
+            
             fishbhs.Add(new InertiaBehavior());
             fishbhs.Add(new RandomBehavior());
             fishbhs.Add(new AlignmentBehavior());
@@ -45,7 +45,8 @@ namespace flocking {
             whalebhs.Add(new SeparationBehavior());
             whalebhs.Add(new HuntingBehavior());
 
-            float whaleRatio = 0.02f;
+            //float whaleRatio = 0.02f;
+            int whaleNum = 2; //left hand and right hand
 
             Vector2 pos = Vector2.Zero;
             Vector2 dir = Vector2.Zero;
@@ -58,13 +59,29 @@ namespace flocking {
                 dir.Y = (float)Math.Sin(randAngle);
 
                 Animal anm;
-                if (rand.NextDouble() < whaleRatio) {
-                    anm = new Whale(pos, dir);
-                    anm.Behaviors = whalebhs;
-                } else {
+                //if (rand.NextDouble() < whaleRatio) {
+                //    anm = new Whale(pos, dir);
+                //    anm.Behaviors = whalebhs;
+                //} else {
                     anm = new Fish(pos, dir);
                     anm.Behaviors = fishbhs;
-                }
+                    anm.ZPosition = (float)(rand.NextDouble() * Game1.thickness) % Game1.thickness;
+                //}
+                formation.add(anm);
+
+            }
+
+            for (int i = 0; i < whaleNum; ++i)
+            {
+                Animal anm;
+                anm = new Whale(pos, dir);
+                anm.Behaviors = whalebhs;
+                anm.iLeftRightHand = -1; 
+                formation.add(anm);
+
+                anm = new Whale(pos, dir);
+                anm.Behaviors = whalebhs;
+                anm.iLeftRightHand = 1;
                 formation.add(anm);
             }
             Updater.Formation = formation;

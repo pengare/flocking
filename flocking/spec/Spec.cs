@@ -15,7 +15,8 @@ namespace flocking.spec {
         float RandomDirectionSensitivity { get; }
         float MemberSensitivity { get; }
         float AlienSensitivity { get; }
-
+        float AlienSeparationDistance { get; }
         float RotationLimitation { get; }
+
     }
 }

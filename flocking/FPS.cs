@@ -79,6 +79,8 @@ namespace flocking
             MouseState mouse = Mouse.GetState();
             spriteBatch.Begin();
             spriteBatch.DrawString(fpsFont, "Frames Per Second: " + fps, new Vector2(10, 10), Color.White);
+            //spriteBatch.DrawString(fpsFont, "left hand: " + Kinect.leftHandWhale.X + "," +Kinect.leftHandWhale.Y, new Vector2(10, 100), Color.White);
+            //spriteBatch.DrawString(fpsFont, "right hand: " + Kinect.rightHandWhale.X + "," + Kinect.rightHandWhale.Y, new Vector2(10, 200), Color.White);
             //spriteBatch.DrawString(fpsFont, "Frames Per Second: " + mouse.Y, new Vector2(10, 30), Color.White);
             {
                 //use player unique identifier to choose an image

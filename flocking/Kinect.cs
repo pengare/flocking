@@ -20,10 +20,14 @@ namespace flocking
     /// </summary>
     public class Kinect : Microsoft.Xna.Framework.GameComponent
     {
-        private Game1 game;
-        private Camera camera;
+        //private Game1 game;
+        //private Camera camera;
         //private Player player;
 
+        public static Vector2 leftHandWhale;
+        public static Vector2 rightHandWhale;
+        public static Boolean bLeftDataValid = false;
+        public static Boolean bRightDataValid = false;
 
         KinectSensor kinectSensor;
         private Skeleton[] skeletonData;
@@ -36,14 +40,16 @@ namespace flocking
 
         #region User Position
         //this roation will send to camera and cause update
-        private float YRotation = 0.0f;
-        private float XRotation = 0.0f;
+        //private float YRotation = 0.0f;
+        //private float XRotation = 0.0f;
 
         private Vector3 prevRightHandPos;
         private Vector3 currRightHandPos;
 
         private Vector3 prevLeftHandPos;
         private Vector3 currLeftHandPos;
+
+        private Vector3 currSpinePos;
 
         private float prevRightHandYAngle;
         private float currRightHandYAngle;
@@ -58,10 +64,10 @@ namespace flocking
         private float currLeftHandXAngle;
 
 
-        //This is for shoot gesture
-        private bool bInShoot = false;
-        private float shootStep = 0.0f;
-        private float shootThreshold = 5.0f;
+        ////This is for shoot gesture
+        //private bool bInShoot = false;
+        //private float shootStep = 0.0f;
+        //private float shootThreshold = 5.0f;
         #endregion
 
         public Kinect(Game game)
@@ -204,19 +210,19 @@ namespace flocking
 
         void LoadGameComponents()
         {
-            //Load game
-            this.game = this.Game.Services.GetService(typeof(Game1)) as Game1;
-            if (this.game == null)
-            {
-                throw new InvalidOperationException("Game not found.");
-            }
+            ////Load game
+            //this.game = this.Game.Services.GetService(typeof(Game1)) as Game1;
+            //if (this.game == null)
+            //{
+            //    throw new InvalidOperationException("Game not found.");
+            //}
 
-            //Load camera
-            this.camera = this.Game.Services.GetService(typeof(Camera)) as Camera;
-            if (this.camera == null)
-            {
-                throw new InvalidOperationException("ICameraService not found.");
-            }
+            ////Load camera
+            //this.camera = this.Game.Services.GetService(typeof(Camera)) as Camera;
+            //if (this.camera == null)
+            //{
+            //    throw new InvalidOperationException("ICameraService not found.");
+            //}
 
             ////Load player
             //this.player = this.Game.Services.GetService(typeof(Player)) as Player;
@@ -312,7 +318,7 @@ namespace flocking
                             SkeletonPoint elbowLeft = data.Joints[JointType.ElbowLeft].Position;
                             SkeletonPoint shoulderLeft = data.Joints[JointType.ShoulderLeft].Position;
                             SkeletonPoint hipLeft = data.Joints[JointType.HipLeft].Position;
-
+                            
                             //cosine law
                             float angleLeftY = (float)Math.Acos((Math.Pow(Vector2.Distance(new Vector2(handLeft.X, handLeft.Z), new Vector2(elbowLeft.X, elbowLeft.Z)), 2)
                                 + Math.Pow(Vector2.Distance(new Vector2(elbowLeft.X, elbowLeft.Z), new Vector2(shoulderLeft.X, shoulderLeft.Z)), 2)
@@ -334,54 +340,91 @@ namespace flocking
                             currLeftHandXAngle = getAngleTrig(handLeft.X, handLeft.Z);
                             currLeftHandYAngle = getAngleTrig(handLeft.Y, handLeft.Z);
 
+
+                            SkeletonPoint spine = data.Joints[JointType.Spine].Position;
+                            currSpinePos.X = spine.X * 100f;
+                            currSpinePos.Y = spine.Y * 100f;
+                            currSpinePos.Z = spine.Z * 100f;
+
+
                             //Rotate
-                            if (MathHelper.ToDegrees(angleLeftY) > 140.0f)
+                            if (MathHelper.ToDegrees(angleLeftY) > 120.0f)
                             {
                                 if (MathHelper.ToDegrees(angleLeftX) > 10.0f && MathHelper.ToDegrees(angleLeftX) < 170.0f)
                                 {
-                                    //YRotation = (prevLeftHandYAngle - currLeftHandYAngle) * Camera.cameraSpeed * 100.0f * 5.0f;
-                                    YRotation = (prevLeftHandPos.X - currLeftHandPos.X) * 0.04f;
-                                    XRotation = -(prevLeftHandPos.Y - currLeftHandPos.Y) * 0.04f;
-                                    this.camera.UpdateCameraLook(0.0f, YRotation, 0.0f);
-                                    this.camera.UpdateCameraLook(XRotation, 0.0f, 0.0f);
-                                    //Peng after talk we suppress x rotation 
-                                    //RotationXModel += (prevHandXAngle - currHandXAngle) * 5;
-                                }
-                            }
-
-                            //Shoot
-                            if (MathHelper.ToDegrees(angleRightX) > 20.0f && MathHelper.ToDegrees(angleRightX) < 170.0f)
-                            {
-                                if (currRightHandPos.Z >= prevRightHandPos.Z)
-                                {
-                                    if (!bInShoot)
-                                    {
-                                        shootStep = 0;
-                                        bInShoot = true;
-                                    }
-
-
-                                    if (bInShoot)
-                                    {
-                                        shootStep += (currRightHandPos.Z - prevRightHandPos.Z);
-                                        if (shootStep > shootThreshold)
-                                        {
-                                            //this.player.ShootEnemy();
-                                            bInShoot = false;
-                                            shootStep = 0;
-                                        }
-                                    }
+                                    bLeftDataValid = true;
+                                    leftHandWhale = new Vector2(currLeftHandPos.X - currSpinePos.X, currLeftHandPos.Y - currSpinePos.Y);
+                                    ////YRotation = (prevLeftHandYAngle - currLeftHandYAngle) * Camera.cameraSpeed * 100.0f * 5.0f;
+                                    //YRotation = (prevLeftHandPos.X - currLeftHandPos.X) * 0.04f;
+                                    //XRotation = -(prevLeftHandPos.Y - currLeftHandPos.Y) * 0.04f;
+                                    //this.camera.UpdateCameraLook(0.0f, YRotation, 0.0f);
+                                    //this.camera.UpdateCameraLook(XRotation, 0.0f, 0.0f);
+                                    ////Peng after talk we suppress x rotation 
+                                    ////RotationXModel += (prevHandXAngle - currHandXAngle) * 5;
                                 }
                                 else
                                 {
-                                    bInShoot = false;
-                                    shootStep = 0;
+                                    bLeftDataValid = false;
                                 }
-
-
-
-
                             }
+                            else
+                            {
+                                bLeftDataValid = false;
+                            }
+
+                            if (MathHelper.ToDegrees(angleRightY) > 120.0f)
+                            {
+                                if (MathHelper.ToDegrees(angleRightX) > 10.0f && MathHelper.ToDegrees(angleRightX) < 170.0f)
+                                {
+                                    bRightDataValid = true;
+                                    rightHandWhale = new Vector2(currRightHandPos.X - currSpinePos.X, currRightHandPos.Y - currSpinePos.Y);
+                                    ////YRotation = (prevLeftHandYAngle - currLeftHandYAngle) * Camera.cameraSpeed * 100.0f * 5.0f;
+                                    //YRotation = (prevLeftHandPos.X - currLeftHandPos.X) * 0.04f;
+                                    //XRotation = -(prevLeftHandPos.Y - currLeftHandPos.Y) * 0.04f;
+                                    //this.camera.UpdateCameraLook(0.0f, YRotation, 0.0f);
+                                    //this.camera.UpdateCameraLook(XRotation, 0.0f, 0.0f);
+                                    ////Peng after talk we suppress x rotation 
+                                    ////RotationXModel += (prevHandXAngle - currHandXAngle) * 5;
+                                }
+                                else
+                                {
+                                    bRightDataValid = false;
+                                }
+                            }
+                            else
+                            {
+                                bRightDataValid = false;
+                            }
+
+                            ////Shoot
+                            //if (MathHelper.ToDegrees(angleRightX) > 20.0f && MathHelper.ToDegrees(angleRightX) < 170.0f)
+                            //{
+                            //    if (currRightHandPos.Z >= prevRightHandPos.Z)
+                            //    {
+                            //        if (!bInShoot)
+                            //        {
+                            //            shootStep = 0;
+                            //            bInShoot = true;
+                            //        }
+
+
+                            //        if (bInShoot)
+                            //        {
+                            //            shootStep += (currRightHandPos.Z - prevRightHandPos.Z);
+                            //            if (shootStep > shootThreshold)
+                            //            {
+                            //                //this.player.ShootEnemy();
+                            //                bInShoot = false;
+                            //                shootStep = 0;
+                            //            }
+                            //        }
+                            //    }
+                            //    else
+                            //    {
+                            //        bInShoot = false;
+                            //        shootStep = 0;
+                            //    }
+                            //}
 
                             prevRightHandPos = currRightHandPos;
                             prevRightHandYAngle = currRightHandYAngle;

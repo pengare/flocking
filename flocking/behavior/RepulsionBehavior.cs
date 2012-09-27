@@ -15,8 +15,8 @@ namespace flocking.behavior {
 
         public BehaviorType BehaviorType { get { return type; } }
         public bool isReactive(Animal me, Animal you, ref Vector2 dir, float dist) {
-            return (you.AnimalType == AnimalType.Whale)
-                && (dist < me.AnimalSpec.SeparationDistance);
+            return (you.AnimalType == AnimalType.Whale) && you.bActive == true
+                && (dist < me.AnimalSpec.AlienSeparationDistance);
         }
         public Vector2 react(Animal me, Animal you, ref Vector2 dir, float dist) {
             Vector2 result = dir * -me.AnimalSpec.AlienSensitivity;

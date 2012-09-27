@@ -10,6 +10,7 @@ using flocking.behavior;
 namespace flocking.animal {
     public class Whale : Animal {
         public const AnimalType defaultType = AnimalType.Whale;
+        
 
         private static Random rand = new Random();
         public Whale(Vector2 pos, Vector2 dir) {

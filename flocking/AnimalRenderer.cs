@@ -45,8 +45,18 @@ namespace flocking {
                 animalLooks[index].CopyAbsoluteBoneTransformsTo(transforms);
 
                 Matrix world, scale, rotation, translation;
-                scale = Matrix.CreateScale(0.008f * anm.ZPosition * 0.01f, 0.008f * anm.ZPosition * 0.01f, 0.008f * anm.ZPosition * 0.01f);
-                Vector3 position = new Vector3(anm.Position.X, anm.Position.Y, 0);
+                Vector3 position;
+                if (anm.AnimalType == AnimalType.Fish)
+                {
+                    scale = Matrix.CreateScale(0.008f * anm.ZPosition * 0.01f, 0.008f * anm.ZPosition * 0.01f, 0.008f * anm.ZPosition * 0.01f);
+                    position = new Vector3(anm.Position.X, anm.Position.Y, anm.ZPosition);
+                }
+                else  //whale
+                {
+                    scale = Matrix.CreateScale(0.1f * anm.ZPosition * 0.01f, 0.1f * anm.ZPosition * 0.01f, 0.1f * anm.ZPosition * 0.01f);
+                    position = new Vector3(anm.Position.X, anm.Position.Y, 0);
+                }
+                
                 rotation = Matrix.CreateRotationY(rot);
                 translation = Matrix.CreateTranslation(position);
                 world = scale * translation;
@@ -55,10 +65,20 @@ namespace flocking {
                 {
                     foreach (BasicEffect effectTemp in mesh.Effects)
                     {
+                        effectTemp.Alpha = 0.5f;
+                        if (anm.AnimalType == AnimalType.Whale)
+                        {
+                            if (anm.bActive == true)
+                                effectTemp.Alpha = 0.3f;
+                            else
+                                effectTemp.Alpha = 0.0f;
+                        }
                         effectTemp.EnableDefaultLighting();
                         effectTemp.LightingEnabled = true;
                         effectTemp.DiffuseColor = Color.White.ToVector3();
                         effectTemp.AmbientLightColor = Color.White.ToVector3();
+                        effectTemp.EmissiveColor = Color.White.ToVector3();
+                        effectTemp.SpecularColor = Color.White.ToVector3();
                         effectTemp.World = transforms[mesh.ParentBone.Index] * world;
                         effectTemp.View = camera.ViewMatrix;
                         effectTemp.Projection = camera.ProjectMatrix;
