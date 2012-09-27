@@ -117,6 +117,7 @@
     <Compile Include="behavior\SeparationBehavior.cs" />
     <Compile Include="behavior\HuntingBehavior.cs" />
     <Compile Include="Camera.cs" />
+    <Compile Include="Distortion.cs" />
     <Compile Include="Formation.cs" />
     <Compile Include="FPS.cs" />
     <Compile Include="Grid.cs" />

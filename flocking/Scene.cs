@@ -15,13 +15,16 @@ namespace flocking {
         private int heads, slits;
         private Random rand;
 
-        public Scene(int width, int height, int heads, int slits) {
+        private Game1 game { get; set; }
+
+        public Scene(Game1 game, int width, int height, int heads, int slits) {
             rand = new Random();
             this.screen = new Rectangle(0, 0, width, height);
             this.heads = heads;
             this.slits = slits;
+            this.game = game;
             Updater = new AnimalUpdater();
-            Renderer = new AnimalRenderer();
+            Renderer = new AnimalRenderer(game);
             reset();
         }
         public void reset() {
@@ -32,7 +35,7 @@ namespace flocking {
             fishbhs.Add(new AlignmentBehavior());
             fishbhs.Add(new SeparationBehavior());
             fishbhs.Add(new CohesionBehavior());
-            //fishbhs.Add(new RepulsionBehavior());
+            fishbhs.Add(new RepulsionBehavior());
             List<Behavior> whalebhs = new List<Behavior>();
             whalebhs.Add(new InertiaBehavior());
             whalebhs.Add(new RandomBehavior());
