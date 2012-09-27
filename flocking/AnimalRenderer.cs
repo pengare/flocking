@@ -45,7 +45,7 @@ namespace flocking {
                 animalLooks[index].CopyAbsoluteBoneTransformsTo(transforms);
 
                 Matrix world, scale, rotation, translation;
-                scale = Matrix.CreateScale(0.008f, 0.008f, 0.008f);
+                scale = Matrix.CreateScale(0.008f * anm.ZPosition * 0.01f, 0.008f * anm.ZPosition * 0.01f, 0.008f * anm.ZPosition * 0.01f);
                 Vector3 position = new Vector3(anm.Position.X, anm.Position.Y, 0);
                 rotation = Matrix.CreateRotationY(rot);
                 translation = Matrix.CreateTranslation(position);

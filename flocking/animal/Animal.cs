@@ -13,6 +13,9 @@ namespace flocking.animal {
     public abstract class Animal {
         public Vector2 Position { get; set; }
         public Vector2 Direction { get; set; }
+        public float ZPosition = 101;
+        public int ZDirection = 1;
+        public Random randZ = new Random();
         public Color Color { get; set; }
         public AnimalType AnimalType { get; set; }
         public Spec AnimalSpec { get; set; }
@@ -42,6 +45,12 @@ namespace flocking.animal {
 
             float rotLimit = AnimalSpec.RotationLimitation * dt;
             Direction = restrictRotationSpeed(Direction, newDir, rotLimit);
+
+            //update Z position
+            ZPosition += ZDirection * 0.2f;
+            if (ZPosition >= Game1.thickness || ZPosition <= 100.0f)
+                ZDirection = -ZDirection;
+
         }
 
         public virtual void reactTo(Animal you, ref Animal target, ref float tdist, ref Vector2 newDir) {

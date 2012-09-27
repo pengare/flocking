@@ -30,6 +30,8 @@ namespace flocking {
 
         Model monster = null;
 
+        public static int thickness = 200;
+
         //vertical placement of view on cylinder
         private float distortionShift = 0.0260000024f;
         //float shiftAngleLocal = 40.5f;
@@ -109,7 +111,7 @@ namespace flocking {
 
         public void LoadCalibration()
         {
-            calibrationTexture = Content.Load<Texture2D>("Grid");
+            calibrationTexture = Content.Load<Texture2D>("calibration");
         }
 
         public void LoadDistortion()
@@ -173,7 +175,7 @@ namespace flocking {
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime) {
-            this.GraphicsDevice.SetRenderTarget(viewport);
+            //this.GraphicsDevice.SetRenderTarget(viewport);
             //GraphicsDevice.Clear(Color.CornflowerBlue);
             GraphicsDevice.Clear(Color.Black);
 
@@ -211,7 +213,7 @@ namespace flocking {
             //spriteBatch.End();
 
 
-            DrawForCylinder();
+           // DrawForCylinder();
 
             //DrawCalibrationPattern();
 
@@ -269,23 +271,23 @@ namespace flocking {
                 GraphicsDevice.DrawUserPrimitives<VertexPositionNormalTexture>(PrimitiveType.TriangleStrip, distortion.Vertices, 0, 3999);
             }
 
-            gameWorldRotation2 = Matrix.CreateRotationZ(MathHelper.ToRadians(120));
-            foreach (EffectPass pass in distortionEffect.CurrentTechnique.Passes)
-            {
-                pass.Apply();
-                distortionEffect.World = gameWorldRotation2;
-                distortionEffect.DiffuseColor = Color.Red.ToVector3();
-                GraphicsDevice.DrawUserPrimitives<VertexPositionNormalTexture>(PrimitiveType.TriangleStrip, distortion.Vertices, 0, 3999);
-            }
+            //gameWorldRotation2 = Matrix.CreateRotationZ(MathHelper.ToRadians(120));
+            //foreach (EffectPass pass in distortionEffect.CurrentTechnique.Passes)
+            //{
+            //    pass.Apply();
+            //    distortionEffect.World = gameWorldRotation2;
+            //    distortionEffect.DiffuseColor = Color.Red.ToVector3();
+            //    GraphicsDevice.DrawUserPrimitives<VertexPositionNormalTexture>(PrimitiveType.TriangleStrip, distortion.Vertices, 0, 3999);
+            //}
 
-            gameWorldRotation2 = Matrix.CreateRotationZ(MathHelper.ToRadians(240));
-            foreach (EffectPass pass in distortionEffect.CurrentTechnique.Passes)
-            {
-                pass.Apply();
-                distortionEffect.World = gameWorldRotation2;
-                distortionEffect.DiffuseColor = Color.Blue.ToVector3();
-                GraphicsDevice.DrawUserPrimitives<VertexPositionNormalTexture>(PrimitiveType.TriangleStrip, distortion.Vertices, 0, 3999);
-            }
+            //gameWorldRotation2 = Matrix.CreateRotationZ(MathHelper.ToRadians(240));
+            //foreach (EffectPass pass in distortionEffect.CurrentTechnique.Passes)
+            //{
+            //    pass.Apply();
+            //    distortionEffect.World = gameWorldRotation2;
+            //    distortionEffect.DiffuseColor = Color.Blue.ToVector3();
+            //    GraphicsDevice.DrawUserPrimitives<VertexPositionNormalTexture>(PrimitiveType.TriangleStrip, distortion.Vertices, 0, 3999);
+            //}
 
             //gameWorldRotation2 = Matrix.CreateRotationZ(MathHelper.ToRadians(360));
             //foreach (EffectPass pass in distortionEffect.CurrentTechnique.Passes)

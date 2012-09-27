@@ -101,6 +101,15 @@ namespace flocking
             {
                 UpdateCameraLook(-Camera.cameraSpeed, 0.0f, 0.0f);
             }
+            if (currentState.IsKeyDown(Keys.W))
+            {
+                Position.Z -= 50;
+            }
+            if (currentState.IsKeyDown(Keys.S))
+            {
+                Position.Z += 50;
+            }
+
 
             this.previousState = currentState;
 
