@@ -18,6 +18,7 @@ namespace flocking.animal {
             this.Direction = dir;
             this.AnimalSpec = new WhaleSpec();
             this.AnimalType = defaultType;
+            this.RadialVelocity = 0;
         }
 
         public override void aimAt(Animal someone, float sdist, ref Animal target, ref float tdist) {

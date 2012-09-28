@@ -62,7 +62,7 @@ namespace flocking {
                 }
                 else  //whale
                 {
-                    scale = Matrix.CreateScale(0.1f * anm.ZPosition * 0.01f, 0.1f * anm.ZPosition * 0.01f, 0.1f * anm.ZPosition * 0.01f);
+                    scale = Matrix.CreateScale(0.1f , 0.1f, 0.1f);
                     position = new Vector3(anm.Position.X, anm.Position.Y, 0);
                 }
                 

@@ -48,9 +48,15 @@ namespace flocking {
 
         //Used to control the color of bubble
         private double intervalTime = 0;
-        private const double timeThreshold = 5000; //5 second
+        private const double timeThreshold = 8000; //8 second
         private int colorIndex = 0; //indicate which color to choose
         private List<Model> colorPool = new List<Model>();  //save all color model
+
+        //Used to control embrace gesture
+        public static Boolean bInEmbrace = false;
+        //private double intervalTimeEmbrace = 0;
+        //private const double timeThresholdEmbrace = 5000; //5 second
+        public static Vector2 screenCenter = Vector2.Zero;
 
         public Game1() {
             graphics = new GraphicsDeviceManager(this);
@@ -94,6 +100,8 @@ namespace flocking {
             View = Matrix.CreateLookAt(new Vector3(0, 0, 2), Vector3.Zero, Vector3.Up);
             Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4, 16.0f / 9.0f, 1, 500);
 
+
+            screenCenter = new Vector2(graphics.PreferredBackBufferWidth / 2, graphics.PreferredBackBufferHeight / 2);
 
             base.Initialize();
         }
@@ -188,6 +196,19 @@ namespace flocking {
 
             if(keyboard.IsKeyDown(Keys.Escape))
                 Exit();
+            if (keyboard.IsKeyDown(Keys.E))
+            {
+                if (Game1.bInEmbrace == false)
+                {
+                    Game1.bInEmbrace = true;
+                }
+                else
+                {
+                    Game1.bInEmbrace = false;
+                    scene.reset();
+                }
+
+            }
             // TODO: Add your update logic here
             scene.Updater.update(gameTime);
 

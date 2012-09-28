@@ -6,7 +6,9 @@ using Microsoft.Xna.Framework;
 
 namespace flocking.spec {
     public class FishSpec : Spec {
-        public float RadialVelocity { get; private set; }
+        public static float RadialVelocityOriginal = 10f;
+        public  float RadialVelocity { get; set; }
+        
 
         public float DetectionDistance { get; private set; }
         public float SeparationDistance { get; private set; }
@@ -20,6 +22,7 @@ namespace flocking.spec {
         public float RotationLimitation { get; private set; }
 
         public FishSpec() {
+
             RadialVelocity = 10f;
 
             DetectionDistance = 70f;

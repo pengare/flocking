@@ -23,6 +23,10 @@ namespace flocking.animal {
         public Spec AnimalSpec { get; set; }
         public List<Behavior> Behaviors { get; set; }
 
+        //for repulsion behavior
+        public float RadialVelocity;
+
+
         public abstract void updateColor(Animal nearest, float dist);
         public abstract void aimAt(Animal someone, float sdist, ref Animal target, ref float tdist);
 
@@ -33,25 +37,53 @@ namespace flocking.animal {
         }
 
         public virtual void updateDirection(float dt, Formation frm, IEnumerable<Animal> others) {
-            Vector2 newDir = Vector2.Zero;
-            Animal target = null;
-            float tdist = float.MaxValue;
+            if (!Game1.bInEmbrace)
+            {
+                Vector2 newDir = Vector2.Zero;
+                Animal target = null;
+                float tdist = float.MaxValue;
 
-            foreach (Animal you in others) {
-                reactTo(you, ref target, ref tdist, ref newDir);
+                foreach (Animal you in others)
+                {
+                    reactTo(you, ref target, ref tdist, ref newDir);
+                }
+                updateColor(target, tdist);
+                if (newDir.Length() < 0.01f)
+                    return;
+                newDir.Normalize();
+
+                float rotLimit = AnimalSpec.RotationLimitation * dt;
+                Direction = restrictRotationSpeed(Direction, newDir, rotLimit);
+
+                //update Z position
+                ZPosition += ZDirection;//*0.2f;
+                if (ZPosition >= Game1.thickness || ZPosition <= 0.0f)
+                    ZDirection = -ZDirection;
             }
-            updateColor(target, tdist);
-            if (newDir.Length() < 0.01f)
-                return;
-            newDir.Normalize();
+            else //in embrace gesture
+            {
+                Vector2 newDir = Vector2.Zero;
+                Animal target = null;
+                float tdist = float.MaxValue;
 
-            float rotLimit = AnimalSpec.RotationLimitation * dt;
-            Direction = restrictRotationSpeed(Direction, newDir, rotLimit);
+                foreach (Animal you in others)
+                {
+                    reactTo(you, ref target, ref tdist, ref newDir);
+                }
+                updateColor(target, tdist);
+                if (newDir.Length() < 0.01f)
+                    return;
+                newDir.Normalize();
 
-            //update Z position
-            ZPosition += ZDirection;//*0.2f;
-            if (ZPosition >= Game1.thickness || ZPosition <= 0.0f)
-                ZDirection = -ZDirection;
+                float rotLimit = AnimalSpec.RotationLimitation * dt;
+                Direction = restrictRotationSpeed(Direction, newDir, rotLimit);
+
+                Vector2 offset = new Vector2((float)randZ.NextDouble(), (float)randZ.NextDouble());
+                newDir = Game1.screenCenter - this.Position;
+                newDir.Normalize();
+                Direction = Direction + newDir + offset;
+            }
+
         }
 
         public virtual void reactTo(Animal you, ref Animal target, ref float tdist, ref Vector2 newDir) {
@@ -72,9 +104,24 @@ namespace flocking.animal {
         public virtual void updatePosition(float dt, Formation frm) {
             if (this.AnimalType == AnimalType.Fish)
             {
-                Vector2 newPos = Position + AnimalSpec.RadialVelocity * Direction * dt;
-                frm.normalize(ref newPos, out newPos);
-                frm.move(this, newPos);
+                if (!Game1.bInEmbrace)
+                {
+                    Vector2 newPos = Position + this.RadialVelocity * Direction * dt;
+                    frm.normalize(ref newPos, out newPos);
+                    frm.move(this, newPos);
+
+                    if (this.RadialVelocity > FishSpec.RadialVelocityOriginal)
+                    {
+                        this.RadialVelocity *= 0.999f;
+                    }
+                }
+                else //in embrace, gather quickly
+                {
+                    Vector2 newPos = Position + AnimalSpec.RadialVelocity * Direction * dt * 20.0f;
+                    frm.normalize(ref newPos, out newPos);
+                    frm.move(this, newPos);
+                }
+
             }
             else if (this.AnimalType == AnimalType.Whale && this.iLeftRightHand == -1)  //left hand
             {

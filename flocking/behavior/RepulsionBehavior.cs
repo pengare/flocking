@@ -5,6 +5,7 @@ using System.Text;
 using flocking.animal;
 using Microsoft.Xna.Framework;
 using System.Diagnostics;
+using flocking.spec;
 
 namespace flocking.behavior {
     public class RepulsionBehavior : Behavior {
@@ -21,6 +22,11 @@ namespace flocking.behavior {
         public Vector2 react(Animal me, Animal you, ref Vector2 dir, float dist) {
             Vector2 result = dir * -me.AnimalSpec.AlienSensitivity;
             float len = result.Length();
+            //acclerate radialspeed
+            if (me.RadialVelocity - FishSpec.RadialVelocityOriginal < 20)
+            {
+                me.RadialVelocity *= 10.0f;
+            }
             Debug.Assert(0 < len && len < 1e5);
             return result;
         }
