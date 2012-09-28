@@ -110,8 +110,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="venus.FBX">
-      <Name>venus</Name>
+    <Compile Include="venus_brown.FBX">
+      <Name>venus_brown</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
     </Compile>
@@ -133,6 +133,23 @@
   <ItemGroup>
     <Compile Include="whale.FBX">
       <Name>whale</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="venus_blue.FBX">
+      <Name>venus_blue</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+    </Compile>
+    <Compile Include="venus_red.FBX">
+      <Name>venus_red</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+    </Compile>
+    <Compile Include="venus_yellow.FBX">
+      <Name>venus_yellow</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
     </Compile>
