@@ -20,7 +20,7 @@ namespace flocking.spec {
         public float RotationLimitation { get; private set; }
 
         public FishSpec() {
-            RadialVelocity = 100f;
+            RadialVelocity = 10f;
 
             DetectionDistance = 70f;
             SeparationDistance = 60f;

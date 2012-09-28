@@ -33,6 +33,15 @@ namespace flocking {
             //textureTranslations[index] = new Vector2(tex.Width / 2, tex.Height / 2);
         }
 
+        public void replaceAnimalTexture(AnimalType type, Model model)
+        {
+            int index = (int)type;
+            if(index <= animalLooks.Count)
+            {
+                animalLooks[index] = model;
+            }
+        }
+
         public void draw(SpriteBatch spr) {
             foreach (Animal anm in Formation.AnimalList) {
                 int index = (int) anm.AnimalType;

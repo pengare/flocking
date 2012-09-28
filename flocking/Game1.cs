@@ -46,11 +46,17 @@ namespace flocking {
         Matrix View, Projection;
         Texture2D calibrationTexture;
 
+        //Used to control the color of bubble
+        private double intervalTime = 0;
+        private const double timeThreshold = 5000; //5 second
+        private int colorIndex = 0; //indicate which color to choose
+        private List<Model> colorPool = new List<Model>();  //save all color model
+
         public Game1() {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
 
-            graphics.IsFullScreen = true;
+            //graphics.IsFullScreen = true;
             graphics.PreferredBackBufferWidth = 1280;
             graphics.PreferredBackBufferHeight = 720;
             IsFixedTimeStep = false;
@@ -107,13 +113,23 @@ namespace flocking {
             int heads = 200;
             int slits = 16;
             scene = new Scene(this, width, height, heads, slits);
-            scene.Renderer.addAnimalTexture(animal.AnimalType.Fish, Content.Load<Model>("venus"));
+            scene.Renderer.addAnimalTexture(animal.AnimalType.Fish, Content.Load<Model>("venus_brown"));
             scene.Renderer.addAnimalTexture(animal.AnimalType.Whale, Content.Load<Model>("whale"));
             
-            monster = Content.Load<Model>("venus");
+            monster = Content.Load<Model>("venus_brown");
+
+            LoadColorModel();
 
             LoadDistortion();
             LoadCalibration();
+        }
+
+        public void LoadColorModel()
+        {
+            colorPool.Add(Content.Load<Model>("venus_brown"));
+            colorPool.Add(Content.Load<Model>("venus_yellow"));
+            colorPool.Add(Content.Load<Model>("venus_blue"));
+            colorPool.Add(Content.Load<Model>("venus_red"));
         }
 
         public void LoadCalibration()
@@ -151,6 +167,7 @@ namespace flocking {
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime) {
+            UpdateColor(gameTime);
             // Allows the game to exit
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
@@ -177,6 +194,19 @@ namespace flocking {
             base.Update(gameTime);
         }
 
+        public void UpdateColor(GameTime gameTime)
+        {
+            intervalTime += gameTime.ElapsedGameTime.Milliseconds;
+            if (intervalTime > timeThreshold)
+            {
+                colorIndex++;
+                if (colorIndex >= 4)
+                    colorIndex = 0;
+
+                scene.Renderer.replaceAnimalTexture(animal.AnimalType.Fish, colorPool[colorIndex]);
+                intervalTime = 0;
+            }
+        }
         /// <summary>
         /// This is called when the game should draw itself.
         /// </summary>
